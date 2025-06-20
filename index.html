@@ -147,8 +147,19 @@
           const y = Math.floor(pixelIndex / ancho);
           const x = pixelIndex % ancho;
 
-          // Nuevo patrón: 2 píxeles normales, 1 invertido
-          if ((x + y * ancho) % 3 === 2) {
+          const usarPatronA = (y % 2 === 0); // alterna patrón por fila
+
+          let debeInvertir = false;
+
+          if (usarPatronA) {
+            // patrón A: 1 normal, 1 invertido
+            debeInvertir = ((x + y * ancho) % 2 === 1);
+          } else {
+            // patrón B: 2 normales, 1 invertido
+            debeInvertir = ((x + y * ancho) % 3 === 2);
+          }
+
+          if (debeInvertir) {
             const r = data[i];
             const g = data[i + 1];
             const b = data[i + 2];
@@ -161,7 +172,6 @@
 
         ctx.putImageData(imageData, 0, 0);
         status.textContent = '¡Proceso completado!';
-
         downloadLink.href = canvas.toDataURL('image/png');
         downloadLink.download = 'imagen_procesada.png';
         downloadLink.classList.remove('hidden');
